@@ -1,0 +1,36 @@
+{%- from "macros.njk" import icon, logo -%}
+<footer class="site-footer theme-dark" id="pie">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <a class="logo" href="{{ home }}#inicio" aria-label="{{ copy.a11y.home }}">{{ logo(site) }}</a>
+      <p class="site-footer__tagline">{{ copy.footer.tagline }}</p>
+    </div>
+
+    <nav class="site-footer__col" aria-labelledby="footer-nav-title">
+      <h2 class="label" id="footer-nav-title">{{ copy.footer.navLabel }}</h2>
+      <ul class="site-footer__links site-footer__links--nav">
+        {%- for item in copy.nav %}
+        <li><a href="{{ home }}{{ item.href }}">{{ item.label }}</a></li>
+        {%- endfor %}
+      </ul>
+    </nav>
+
+    <div class="site-footer__col">
+      <h2 class="label">{{ copy.footer.contactLabel }}</h2>
+      <ul class="site-footer__links">
+        <li><a href="tel:{{ site.phone.e164 }}">{{ site.phone.display }}</a></li>
+        <li><a class="site-footer__email" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+        <li>
+          {%- if site.address and site.address.street %}{{ site.address.street }}, {% endif -%}
+          {{ site.locality }}, {{ site.region }}
+          {%- if site.address and site.address.postalCode %} {{ site.address.postalCode }}{% endif %}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="wrap site-footer__legal">
+    <p>© {{ build.year }} {{ site.legalName }}. {{ copy.footer.rights }}</p>
+    <a class="site-footer__top" href="{{ home }}#inicio">{{ copy.footer.top }}{{ icon("arrow") }}</a>
+  </div>
+</footer>

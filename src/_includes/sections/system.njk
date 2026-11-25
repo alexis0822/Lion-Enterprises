@@ -1,0 +1,51 @@
+{%- from "macros.njk" import icon, eyebrow -%}
+{%- set s = copy.system -%}
+<section class="section system theme-dark" id="sistema" aria-labelledby="system-title">
+  <div class="wrap">
+    {{ eyebrow("03", s.eyebrow) }}
+
+    <div class="section-head">
+      <h2 class="h2" id="system-title" data-reveal>{{ s.title }}</h2>
+      <div class="section-head__intro" data-reveal>
+        {%- for p in s.intro %}
+        <p>{{ p }}</p>
+        {%- endfor %}
+      </div>
+    </div>
+
+    <div class="system__grid" data-system>
+      <div class="system__figure">
+        <div class="system__figure-in" data-diagram>
+          {% layerDiagram s.layers %}
+        </div>
+      </div>
+
+      <div class="system__steps">
+        <h3 class="label system__steps-title">{{ s.layersLabel }}</h3>
+        <ol class="steps">
+          {%- for layer in s.layers %}
+          <li class="steps__item">
+            <details class="step" name="capas" data-step="{{ loop.index0 }}"{% if loop.first %} open{% endif %}>
+              <summary class="step__summary">
+                <span class="step__num" aria-hidden="true">{{ loop.index | pad2 }}</span>
+                <span class="step__title">{{ layer.title }}</span>
+                <span class="step__tag">{{ layer.tag }}</span>
+                <span class="step__icon" aria-hidden="true">{{ icon("plus") }}</span>
+              </summary>
+              <div class="step__body">
+                <p>{{ layer.text }}</p>
+              </div>
+            </details>
+          </li>
+          {%- endfor %}
+        </ol>
+
+        <div class="system__care">
+          <h3 class="system__care-title">{{ s.care.title }}</h3>
+          <p>{{ s.care.text }}</p>
+        </div>
+        <p class="system__disclaimer">{{ s.disclaimer }}</p>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,33 @@
+{%- from "macros.njk" import eyebrow -%}
+{%- set a = copy.about -%}
+<section class="section about theme-light" id="nosotros" aria-labelledby="about-title">
+  <div class="wrap">
+    {{ eyebrow("01", a.eyebrow) }}
+
+    <div class="about__grid">
+      <h2 class="h2 about__title" id="about-title" data-reveal>{{ a.title }}</h2>
+
+      <div class="about__story" data-reveal>
+        {%- for p in a.paragraphs %}
+        <p>{{ p }}</p>
+        {%- endfor %}
+        <p class="about__statement">{{ a.statement }}</p>
+      </div>
+
+      <div class="about__mission" data-reveal>
+        <p class="label">{{ a.mission.label }}</p>
+        <p class="about__mission-text">{{ a.mission.text }}</p>
+      </div>
+    </div>
+
+    <ul class="pillars">
+      {%- for p in a.pillars %}
+      <li class="pillars__item" data-reveal style="--i:{{ loop.index0 }}">
+        <span class="pillars__num" aria-hidden="true">{{ loop.index | pad2 }}</span>
+        <h3 class="pillars__title">{{ p.title }}</h3>
+        <p class="pillars__text">{{ p.text }}</p>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>

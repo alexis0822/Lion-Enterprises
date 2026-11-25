@@ -1,0 +1,132 @@
+{#-
+  Inquiry form. Two modes, chosen by site.form.endpoint (see src/_data/site.js):
+    endpoint → POSTs to a form service and confirms only when the service accepts the message.
+    mailto   → no service connected: hands the message to the visitor's email app and says so.
+-#}
+{%- from "macros.njk" import icon -%}
+{%- set f = copy.contact.form -%}
+{%- set mode = "endpoint" if site.form.endpoint else "mailto" -%}
+{%- set m = f[mode] -%}
+{%- set config = {
+  "mode": mode,
+  "email": site.email,
+  "subject": f.subject,
+  "signature": f.signature,
+  "labels": { "nombre": f.name, "telefono": f.phone, "email": f.email, "tipo_cliente": f.clientType, "tema": f.topic, "mensaje": f.message },
+  "errors": f.errors,
+  "sending": f.endpoint.sending,
+  "sendError": f.endpoint.error | fill(site),
+  "copied": f.mailto.copied,
+  "copyFailed": f.mailto.copyFailed
+} -%}
+<div class="form-wrap" data-form-wrap>
+  <script type="application/json" data-form-config>{{ config | json | safe }}</script>
+
+  <form class="form" id="solicitud" data-form aria-labelledby="form-title"
+    {%- if mode == "endpoint" %} action="{{ site.form.endpoint }}" method="post"
+    {%- else %} action="mailto:{{ site.email }}" method="post" enctype="text/plain"
+    {%- endif %}>
+    <div class="form__head">
+      <h3 class="form__title" id="form-title">{{ f.title }}</h3>
+      <p class="form__required">{{ f.requiredNote }}</p>
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="f-nombre">{{ f.name }} <span class="field__req" aria-hidden="true">*</span></label>
+      <input class="field__input" id="f-nombre" name="nombre" type="text" autocomplete="name" maxlength="80" required aria-describedby="f-nombre-error">
+      <p class="field__error" id="f-nombre-error" hidden></p>
+    </div>
+
+    <div class="form__pair">
+      <div class="field">
+        <label class="field__label" for="f-telefono">{{ f.phone }} <span class="field__req" aria-hidden="true">*</span></label>
+        <input class="field__input" id="f-telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" maxlength="24" required aria-describedby="f-telefono-error">
+        <p class="field__error" id="f-telefono-error" hidden></p>
+      </div>
+      <div class="field">
+        <label class="field__label" for="f-email">{{ f.email }} <span class="field__opt">({{ f.optional }})</span></label>
+        <input class="field__input" id="f-email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="120" aria-describedby="f-email-error">
+        <p class="field__error" id="f-email-error" hidden></p>
+      </div>
+    </div>
+
+    <fieldset class="field field--choices">
+      <legend class="field__label">{{ f.clientType }} <span class="field__opt">({{ f.optional }})</span></legend>
+      <div class="choices">
+        {%- for t in f.clientTypes %}
+        <label class="choice">
+          <input class="choice__input" type="radio" name="tipo_cliente" value="{{ t }}">
+          <span class="choice__label">{{ t }}</span>
+        </label>
+        {%- endfor %}
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label class="field__label" for="f-tema">{{ f.topic }}</label>
+      <select class="field__input" id="f-tema" name="tema" data-topic-select>
+        <option>{{ f.topicDefault }}</option>
+        {%- for item in copy.solutions.items %}
+        <option>{{ item.title }}</option>
+        {%- endfor %}
+      </select>
+    </div>
+
+    <div class="field">
+      <label class="field__label" for="f-mensaje">{{ f.message }} <span class="field__req" aria-hidden="true">*</span></label>
+      <textarea class="field__input field__input--area" id="f-mensaje" name="mensaje" rows="5" maxlength="1500" required aria-describedby="f-mensaje-hint f-mensaje-error"></textarea>
+      <p class="field__hint" id="f-mensaje-hint">{{ f.messageHint }}</p>
+      <p class="field__error" id="f-mensaje-error" hidden></p>
+    </div>
+
+    {%- if mode == "endpoint" %}
+    <input type="hidden" name="_subject" value="{{ f.subject }} — {{ site.name }}">
+    {%- for key, value in site.form.extraFields %}
+    <input type="hidden" name="{{ key }}" value="{{ value }}">
+    {%- endfor %}
+    {#- Spam trap: hidden from people, tempting for bots. -#}
+    <div class="form__trap" aria-hidden="true">
+      <label for="f-web">No llenar este campo</label>
+      <input id="f-web" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+    </div>
+    {%- else %}
+    <p class="form__notice">
+      {{ icon("info") }}
+      <span>{{ m.notice | fill(site) }}</span>
+    </p>
+    <noscript><p class="form__notice form__notice--plain">{{ m.noscript | fill(site) }}</p></noscript>
+    {%- endif %}
+
+    <p class="form__alert" role="alert" data-form-alert hidden></p>
+    <button class="btn btn--primary form__submit" type="submit" data-form-submit>
+      <span data-form-submit-label>{{ m.submit }}</span>{{ icon("arrow-out" if mode == "mailto" else "arrow", "btn__icon") }}
+    </button>
+    <p class="form__privacy">{{ m.privacy }}</p>
+  </form>
+
+  {%- if mode == "endpoint" %}
+  <div class="form-result form-result--ok" data-form-result hidden>
+    <span class="form-result__icon" aria-hidden="true">{{ icon("check") }}</span>
+    <h3 class="form-result__title" tabindex="-1" data-form-result-title>{{ m.successTitle }}</h3>
+    <p class="form-result__text">{{ m.successText | fill(site) }}</p>
+  </div>
+  {%- else %}
+  <div class="form-result" data-form-result hidden>
+    <span class="form-result__icon" aria-hidden="true">{{ icon("mail") }}</span>
+    <h3 class="form-result__title" tabindex="-1" data-form-result-title>{{ m.handoffTitle }}</h3>
+    <p class="form-result__text">{{ m.handoffText | fill(site) }}</p>
+    <label class="field__label" for="f-vista">{{ m.previewLabel }}</label>
+    <textarea class="field__input field__input--area form-result__preview" id="f-vista" rows="8" readonly data-form-preview></textarea>
+    <div class="form-result__actions">
+      <button class="btn btn--ghost" type="button" data-form-copy>
+        {{ icon("copy", "btn__icon") }}<span>{{ m.copy }}</span>
+      </button>
+      <a class="btn btn--ghost" href="tel:{{ site.phone.e164 }}">
+        {{ icon("phone", "btn__icon") }}<span>{{ copy.cta.callLong | fill(site) }}</span>
+      </a>
+    </div>
+    <p class="form-result__status" role="status" data-form-copy-status></p>
+    <button class="form-result__edit" type="button" data-form-edit>{{ m.edit }}</button>
+  </div>
+  {%- endif %}
+</div>

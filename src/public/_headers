@@ -1,0 +1,12 @@
+# Copied to the site root on build. Netlify and Cloudflare Pages read this file.
+# The font filename is the cache key: replace the file and the URL changes with it.
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'none'; base-uri 'self'; form-action 'self' https: mailto:; frame-ancestors 'none'; img-src 'self'; font-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self' https:

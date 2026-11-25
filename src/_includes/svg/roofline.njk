@@ -1,0 +1,102 @@
+{#-
+  Hero drawing: section through a flat concrete roof with the rooftop details
+  common in Puerto Rico (pretil, cisterna, calentador solar, desagüe).
+  The ochre line is the membrane: one continuous run from pretil to pretil.
+  Labels come from copy.hero.drawing.
+-#}
+{%- set d = copy.hero.drawing -%}
+<svg class="roofline" viewBox="0 0 1120 340" preserveAspectRatio="xMaxYMax slice" focusable="false">
+  <defs>
+    <pattern id="rl-hatch" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <path class="rl-hatchline" d="M.5 0V7"/>
+    </pattern>
+  </defs>
+
+  {#- Water running along the roof to the drain -#}
+  <path class="rl-runoff" d="M126 295.5H1024"/>
+
+  {#- Air-conditioning condenser -#}
+  <g class="rl-fill">
+    <rect x="244" y="294" width="10" height="6"/>
+    <rect x="302" y="294" width="10" height="6"/>
+    <rect x="236" y="246" width="84" height="48"/>
+  </g>
+  <g class="rl-thin">
+    <circle cx="270" cy="270" r="16"/>
+    <circle cx="270" cy="270" r="3.5"/>
+    <path d="M296 258h14M296 264h14M296 270h14M296 276h14M296 282h14"/>
+  </g>
+
+  {#- Vent pipe -#}
+  <g class="rl-fill">
+    <rect x="412" y="266" width="8" height="34"/>
+    <path d="M408 266q8-11 16 0z"/>
+  </g>
+  <path class="rl-line" d="M405 266h22"/>
+
+  {#- Solar water heater -#}
+  <path class="rl-line" d="M686 294v6M798 246v54M814 244v56M798 286l16-24"/>
+  <g class="rl-fill">
+    <path d="M680 289 792 239l3 6.6-112 50z"/>
+    <circle cx="806" cy="231" r="15"/>
+  </g>
+  <g class="rl-thin">
+    <path d="M681.5 292.3l112-50"/>
+    <circle cx="806" cy="231" r="8.5"/>
+  </g>
+
+  {#- Cistern on its base -#}
+  <path class="rl-line" d="M934 278h22v22"/>
+  <g class="rl-fill">
+    <rect x="842" y="288" width="104" height="12"/>
+    <path d="M854 288v-66q0-14 14-14h52q14 0 14 14v66z"/>
+    <rect x="884" y="201" width="20" height="7"/>
+  </g>
+  <rect class="rl-hatch" x="842" y="288" width="104" height="12"/>
+  <path class="rl-thin" d="M854 232h80M854 250h80M854 268h80"/>
+
+  {#- Concrete section: pretiles, slab and wall stubs. The interior stays dry. -#}
+  <rect class="rl-interior" x="114" y="324" width="892" height="16"/>
+  <path class="rl-fill" d="M92 256h22v44h892v-44h22v84h-22v-16H114v16H92z"/>
+  <path class="rl-hatch" d="M92 256h22v44h892v-44h22v84h-22v-16H114v16H92z"/>
+  <g class="rl-fill">
+    <rect x="88" y="250" width="30" height="6"/>
+    <rect x="1002" y="250" width="30" height="6"/>
+    {#- Drain through the pretil, with its downspout -#}
+    <rect x="1006" y="289" width="22" height="11"/>
+    <path d="M1028 289h13v15h-13z"/>
+    <rect x="1031" y="304" width="7" height="36"/>
+  </g>
+  <path class="rl-drip" d="M1034.5 306v34"/>
+
+  {#- The membrane: continuous across the roof, up the pretiles, over bases and around penetrations -#}
+  <path class="rl-membrane" pathLength="1" d="M114 256v44h728v-12h104v12h82"/>
+  <path class="rl-membrane rl-membrane--b" pathLength="1" d="M1006 289v-33"/>
+  <g class="rl-boot">
+    <path d="M408 300v-12h16v12"/>
+    <path d="M951 300v-9h10v9"/>
+  </g>
+
+  {#- Callouts -#}
+  <g class="rl-callout rl-callout--wide">
+    <path class="rl-leader" d="M103 246v-32"/>
+    <text class="rl-label" x="103" y="204" text-anchor="middle">{{ d.parapet }}</text>
+  </g>
+  <g class="rl-callout rl-callout--wide">
+    <circle class="rl-dot" cx="560" cy="300" r="4"/>
+    <path class="rl-leader" d="M560 294v-66"/>
+    <text class="rl-label rl-label--accent" x="560" y="216" text-anchor="middle">{{ d.membrane }}</text>
+  </g>
+  <g class="rl-callout">
+    <path class="rl-leader" d="M806 214v-34"/>
+    <text class="rl-label" x="806" y="170" text-anchor="middle">{{ d.heater }}</text>
+  </g>
+  <g class="rl-callout">
+    <path class="rl-leader" d="M894 199v-49"/>
+    <text class="rl-label" x="894" y="140" text-anchor="middle">{{ d.tank }}</text>
+  </g>
+  <g class="rl-callout">
+    <path class="rl-leader" d="M1036 284v-70"/>
+    <text class="rl-label" x="1036" y="204" text-anchor="middle">{{ d.drain }}</text>
+  </g>
+</svg>

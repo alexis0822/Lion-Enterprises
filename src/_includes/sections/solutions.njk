@@ -1,0 +1,75 @@
+{%- from "macros.njk" import icon, solutionIcon, eyebrow -%}
+{%- set s = copy.solutions -%}
+<section class="section solutions theme-light" id="soluciones" aria-labelledby="solutions-title">
+  <div class="wrap">
+    {{ eyebrow("02", s.eyebrow) }}
+
+    <div class="section-head">
+      <h2 class="h2" id="solutions-title" data-reveal>{{ s.title }}</h2>
+      <p class="section-head__intro" data-reveal>{{ s.intro }}</p>
+    </div>
+
+    <div class="filter" role="group" aria-labelledby="filter-label" data-filter>
+      <p class="label" id="filter-label">{{ s.filterLabel }}</p>
+      <div class="filter__options">
+        {%- for f in s.filters %}
+        <button class="filter__btn" type="button" data-filter-btn="{{ f.key }}" aria-pressed="{{ 'true' if loop.first else 'false' }}">{{ f.label }}</button>
+        {%- endfor %}
+      </div>
+      <p class="visually-hidden" role="status" data-filter-status data-template="{{ s.countLabel }}"></p>
+    </div>
+
+    <ul class="cards" data-cards>
+      {%- for item in s.items %}
+      <li class="card" data-card data-audiences="{{ item.audiences | join(' ') }}">
+        <div class="card__head">
+          {{ solutionIcon(item.icon) }}
+          <span class="card__num" aria-hidden="true">{{ loop.index | pad2 }}</span>
+        </div>
+        <h3 class="card__title">{{ item.title }}</h3>
+        <p class="card__text">{{ item.text }}</p>
+        <div class="card__have">
+          <p class="label">{{ s.haveLabel }}</p>
+          <ul>
+            {%- for h in item.have %}
+            <li>{{ h }}</li>
+            {%- endfor %}
+          </ul>
+        </div>
+        <a class="card__link" href="#contacto" data-topic="{{ item.title }}">
+          <span>{{ copy.cta.info }}<span class="visually-hidden">: {{ item.title }}</span></span>{{ icon("arrow") }}
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+    {#- Phones: the cards scroll sideways; this bar shows how far along the visitor is. -#}
+    <div class="rail" aria-hidden="true" data-rail hidden><span class="rail__thumb" data-rail-thumb></span></div>
+
+    {%- if s.productLines and s.productLines.length %}
+    <div class="lines">
+      <h3 class="label lines__title">{{ s.productLinesTitle }}</h3>
+      <ul class="lines__list">
+        {%- for line in s.productLines %}
+        <li class="lines__item">
+          <div class="lines__name">
+            {%- if line.brand %}<span class="lines__brand">{{ line.brand }}</span>{% endif %}
+            <span>{{ line.name }}</span>
+          </div>
+          <p class="lines__text">{{ line.text }}</p>
+          {%- if line.link %}
+          <a class="lines__link" href="{{ line.link.href }}"{% if "http" in line.link.href %} target="_blank" rel="noopener"{% endif %}>
+            <span>{{ line.link.label }}<span class="visually-hidden">: {{ line.name }}</span></span>{{ icon("arrow-out") }}
+          </a>
+          {%- endif %}
+        </li>
+        {%- endfor %}
+      </ul>
+    </div>
+    {%- endif %}
+
+    <aside class="note" aria-labelledby="note-title">
+      <h3 class="label" id="note-title">{{ s.note.title }}</h3>
+      <p class="note__text">{{ s.note.text }}</p>
+    </aside>
+  </div>
+</section>

@@ -1,0 +1,50 @@
+{%- from "macros.njk" import icon -%}
+<section class="hero theme-dark" id="inicio" aria-labelledby="hero-title" data-hero>
+  <div class="wrap hero__inner">
+    <p class="hero__eyebrow">
+      <span>{{ copy.hero.eyebrow }}</span>
+      <span class="hero__eyebrow-sep" aria-hidden="true"></span>
+      <span>{{ site.locality }}, {{ site.region }}</span>
+    </p>
+
+    <h1 class="hero__title" id="hero-title">
+      {%- for line in copy.hero.title %}
+      <span class="hero__line{% if loop.last %} hero__line--accent{% endif %}" style="--i:{{ loop.index0 }}"><span class="hero__line-in">{{ line }}</span></span>{{ " " if not loop.last }}
+      {%- endfor %}
+    </h1>
+
+    <div class="hero__body">
+      <p class="hero__lede">{{ copy.hero.lede }}</p>
+      <div class="hero__actions" data-hero-actions>
+        <a class="btn btn--primary" href="#contacto">
+          <span>{{ copy.cta.info }}</span>{{ icon("arrow", "btn__icon") }}
+        </a>
+        <a class="btn btn--ghost" href="tel:{{ site.phone.e164 }}">
+          {{ icon("phone", "btn__icon") }}<span>{{ copy.cta.callLong | fill(site) }}</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__art" aria-hidden="true" data-draw>
+    <div class="hero__rain"></div>
+    {% include "svg/roofline.njk" %}
+  </div>
+</section>
+
+<section class="audiences theme-dark" aria-label="{{ copy.audiences.label }}">
+  <div class="wrap">
+    <ul class="audiences__list">
+      {%- for a in copy.audiences.items %}
+      <li class="audiences__item" data-reveal style="--i:{{ loop.index0 }}">
+        <a class="audiences__link" href="#soluciones" data-filter-link="{{ a.filter }}">
+          <span class="audiences__num" aria-hidden="true">{{ loop.index | pad2 }}</span>
+          <span class="audiences__title">{{ a.title }}</span>
+          <span class="audiences__text">{{ a.text }}</span>
+          <span class="audiences__more"><span class="audiences__more-label">{{ copy.audiences.linkLabel }}</span>{{ icon("arrow") }}</span>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+</section>

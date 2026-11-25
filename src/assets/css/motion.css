@@ -1,0 +1,195 @@
+/*
+  Motion. Every animation here explains something (the membrane drawing itself
+  as one continuous line, water running to the drain, layers stacking) or eases
+  content in. Nothing moves for visitors who ask for reduced motion.
+*/
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Hero entrance */
+  .hero__line-in {
+    animation: line-in 0.95s var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 90ms + 60ms);
+  }
+
+  .hero__eyebrow,
+  .hero__lede,
+  .hero__actions {
+    animation: fade-up 0.8s var(--ease-out) both;
+  }
+
+  .hero__lede {
+    animation-delay: 0.4s;
+  }
+
+  .hero__actions {
+    animation-delay: 0.5s;
+  }
+
+  /*
+    The membrane draws itself as one continuous line once the drawing is on
+    screen, then its details and labels appear.
+  */
+  .reveal-on [data-draw] .rl-membrane {
+    stroke-dashoffset: 1;
+  }
+
+  .reveal-on [data-draw] :is(.rl-boot, .rl-callout) {
+    opacity: 0;
+  }
+
+  .reveal-on [data-draw].is-in .rl-membrane {
+    stroke-dashoffset: 0;
+    animation: draw 2.2s cubic-bezier(0.6, 0, 0.2, 1) 0.25s both;
+  }
+
+  .reveal-on [data-draw].is-in .rl-membrane--b {
+    animation-duration: 0.4s;
+    animation-delay: 2.4s;
+  }
+
+  .reveal-on [data-draw].is-in :is(.rl-boot, .rl-callout) {
+    opacity: 1;
+    animation: fade 0.7s ease 2.1s both;
+  }
+
+  .rl-runoff {
+    animation: runoff 1.5s linear infinite;
+  }
+
+  .rl-drip {
+    animation: drip 0.7s linear infinite;
+  }
+
+  .hero__rain::before {
+    animation: rain-near 0.95s linear infinite;
+  }
+
+  .hero__rain::after {
+    animation: rain-far 1.45s linear infinite;
+  }
+
+  /* Looping animations stop while the hero is off screen. */
+  .hero.is-paused .rl-runoff,
+  .hero.is-paused .rl-drip,
+  .hero.is-paused .hero__rain::before,
+  .hero.is-paused .hero__rain::after {
+    animation-play-state: paused;
+  }
+
+  /* Scroll reveal (the .reveal-on class is added by JavaScript, so content is never hidden without it) */
+  .reveal-on [data-reveal] {
+    opacity: 0;
+    transform: translateY(1.25rem);
+    transition:
+      opacity 0.8s var(--ease-out),
+      transform 0.8s var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+
+  .reveal-on [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Layer drawing assembles from the bottom up the first time it is seen. */
+  .reveal-on [data-diagram] .ld__layer {
+    opacity: 0;
+    transform: translateY(calc((var(--i) + 1) * -16px));
+    transition:
+      opacity 0.6s ease,
+      transform 0.9s var(--ease-out);
+    transition-delay: calc(var(--i) * 110ms);
+  }
+
+  .reveal-on [data-diagram].is-in .ld__layer {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-on [data-diagram] .ld__guide {
+    opacity: 0;
+    transition: opacity 0.6s ease 0.7s;
+  }
+
+  .reveal-on [data-diagram].is-in .ld__guide {
+    opacity: 1;
+  }
+
+  /* Cards re-enter when the filter changes */
+  .card.is-entering {
+    animation: fade-up 0.5s var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 50ms);
+  }
+
+  .step[open] .step__body,
+  .qa[open] .qa__a {
+    animation: fade-up 0.45s var(--ease-out) both;
+  }
+
+  .menu[open] .menu__list li,
+  .menu[open] .menu__foot {
+    animation: fade-up 0.55s var(--ease-out) both;
+    animation-delay: calc(var(--i, 5) * 45ms + 60ms);
+  }
+}
+
+@keyframes line-in {
+  from {
+    transform: translateY(110%);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.875rem);
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
+@keyframes runoff {
+  to {
+    stroke-dashoffset: -28;
+  }
+}
+
+@keyframes drip {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+@keyframes rain-near {
+  to {
+    transform: translate3d(0, 220px, 0);
+  }
+}
+
+@keyframes rain-far {
+  to {
+    transform: translate3d(0, 150px, 0);
+  }
+}
+
+@media print {
+  [data-reveal],
+  .ld__layer {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

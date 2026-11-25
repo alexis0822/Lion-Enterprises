@@ -1,0 +1,462 @@
+/* Hero: headline, roof drawing, and the three customer groups below it. */
+
+.hero {
+  --hero-bg: var(--ink-900);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-top: clamp(2rem, 8vw, 4.5rem);
+}
+
+/* Faint column guides, like the grid of a working drawing */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: -1;
+  width: min(100% - var(--gutter) * 2, var(--wrap));
+  border-right: 1px solid rgb(255 255 255 / 0.045);
+  background: linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px) 0 0 / 25% 100%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* Text stays above the drawing and its rain. */
+.hero__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.hero__eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem 0.75rem;
+  margin-bottom: clamp(1.25rem, 4.5vw, 2rem);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-stretch: 118%;
+  line-height: 1.3;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--steel-300);
+}
+
+.hero__eyebrow-sep {
+  width: 1.5rem;
+  height: 2px;
+  background: var(--ochre-400);
+}
+
+.hero__title {
+  font-size: clamp(2.875rem, 13.6vw, 4.75rem);
+  font-weight: 760;
+  line-height: 0.95;
+  letter-spacing: -0.038em;
+}
+
+/* Each line sits in its own clipped box so it can rise into place on load. */
+.hero__line {
+  display: block;
+  overflow: hidden;
+  margin-bottom: -0.1em;
+  padding-bottom: 0.1em;
+}
+
+.hero__line-in {
+  display: block;
+}
+
+.hero__line--accent {
+  color: var(--ochre-400);
+}
+
+.hero__body {
+  display: grid;
+  gap: clamp(1.5rem, 5.5vw, 2rem);
+  margin-top: clamp(1.5rem, 5.5vw, 2.5rem);
+}
+
+.hero__lede {
+  max-width: 34rem;
+  font-size: clamp(1.0625rem, 4.5vw, 1.3125rem);
+  line-height: 1.5;
+  color: var(--steel-300);
+}
+
+.hero__actions {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/*
+  The drawing is anchored bottom-right and cropped from the left, so phones see
+  the right-hand end of the roof and wide screens see it from pretil to pretil.
+*/
+.hero__art {
+  position: relative;
+  height: clamp(15rem, 72vw, 21rem);
+  margin-top: clamp(1rem, 4vw, 3rem);
+  pointer-events: none;
+}
+
+@media (min-width: 30em) {
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 40em) {
+  .hero__title {
+    font-size: clamp(4.75rem, 11vw, 6.5rem);
+  }
+}
+
+@media (min-width: 48em) {
+  .hero__art {
+    height: 45vw;
+  }
+}
+
+@media (min-width: 64em) {
+  .hero {
+    padding-top: clamp(2.5rem, 3.4vw, 3.5rem);
+  }
+
+  /* Sized by width, but held back on short laptop screens so the roof line stays in the first view. */
+  .hero__title {
+    font-size: clamp(4.25rem, min(7.2vw, 13vh), 8.25rem);
+    font-stretch: 106%;
+    letter-spacing: -0.042em;
+  }
+
+  /* Wide screens: second and third lines share a row */
+  .hero__line {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .hero__line:first-child {
+    display: block;
+  }
+
+  .hero__body {
+    grid-template-columns: minmax(0, 34rem) auto;
+    align-items: end;
+    justify-content: space-between;
+  }
+
+  /*
+    The roof from pretil to pretil, scaled so the outer faces of the pretiles
+    (x = 92 and x = 1028 in the drawing) line up with the text column.
+    The empty sky above the labels is trimmed: the drawing is anchored to the bottom.
+  */
+  .hero__art {
+    --art-w: calc(min(100% - var(--gutter) * 2, var(--wrap)) * 1120 / 936);
+    width: var(--art-w);
+    height: auto;
+    aspect-ratio: 1120 / 218;
+    margin: 1.25rem calc((100% - var(--art-w)) / 2) 0;
+  }
+
+  /* Rain spans the whole screen and reaches up behind the text. */
+  .hero__rain {
+    top: -9rem;
+    right: calc(50% - 50vw);
+    left: calc(50% - 50vw);
+  }
+}
+
+/* --- Rain: two drifting layers behind the drawing. Only transforms animate. --- */
+.hero__rain {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  opacity: 0.6;
+  transform: skewX(-9deg);
+  transform-origin: 50% 100%;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 45%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 45%);
+}
+
+.hero__rain::before,
+.hero__rain::after {
+  content: "";
+  position: absolute;
+  inset: -220px -12% 0;
+  background-repeat: repeat;
+}
+
+.hero__rain::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='190' height='220'%3E%3Cpath d='M20 10v26M76 64v18M132 126v30M166 30v16M102 178v22M48 138v14' fill='none' stroke='%2382abc2' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-size: 190px 220px;
+}
+
+.hero__rain::after {
+  opacity: 0.55;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='130' height='150'%3E%3Cpath d='M14 20v12M64 84v14M104 40v10M38 118v12M90 128v10' fill='none' stroke='%2382abc2' stroke-width='1' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-size: 130px 150px;
+}
+
+/* --- Roof drawing --- */
+.roofline {
+  --rl-line: #7b8590;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.roofline :is(path, rect, circle) {
+  vector-effect: non-scaling-stroke;
+}
+
+/* Solid shapes are filled with the page colour so the rain passes behind them. */
+.rl-fill {
+  fill: var(--hero-bg);
+  stroke: var(--rl-line);
+  stroke-width: 1.25;
+}
+
+.rl-interior {
+  fill: var(--hero-bg);
+}
+
+.rl-line {
+  fill: none;
+  stroke: var(--rl-line);
+  stroke-width: 1.25;
+}
+
+.rl-thin {
+  fill: none;
+  stroke: var(--rl-line);
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.rl-hatch {
+  fill: url("#rl-hatch");
+}
+
+.rl-hatchline {
+  fill: none;
+  stroke: var(--rl-line);
+  stroke-width: 0.9;
+  opacity: 0.55;
+}
+
+.roofline .rl-membrane,
+.roofline .rl-boot path,
+.roofline .rl-runoff,
+.roofline .rl-drip,
+.roofline .rl-hatchline {
+  vector-effect: none;
+}
+
+.rl-membrane {
+  fill: none;
+  stroke: var(--ochre-400);
+  stroke-width: 3.6;
+  stroke-linejoin: miter;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.rl-boot {
+  fill: none;
+  stroke: var(--ochre-400);
+  stroke-width: 2.6;
+}
+
+.rl-runoff,
+.rl-drip {
+  fill: none;
+  stroke: var(--water-400);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.rl-runoff {
+  stroke-dasharray: 0.1 27.9;
+}
+
+.rl-drip {
+  stroke-dasharray: 0.1 11.9;
+}
+
+.rl-leader {
+  fill: none;
+  stroke: var(--steel-400);
+  stroke-width: 1;
+}
+
+.rl-dot {
+  fill: var(--ochre-400);
+}
+
+.rl-label {
+  fill: var(--steel-300);
+  font-size: 15px;
+  font-weight: 600;
+  font-stretch: 118%;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.rl-label--accent {
+  fill: var(--ochre-400);
+}
+
+/* Callouts on the left half are cropped away on narrow screens. */
+.rl-callout--wide {
+  display: none;
+}
+
+@media (min-width: 48em) {
+  .rl-label {
+    font-size: 13px;
+  }
+
+  .rl-callout--wide {
+    display: inline;
+  }
+}
+
+@media (min-width: 75em) {
+  .rl-label {
+    font-size: 11px;
+  }
+}
+
+/* --- Customer groups --- */
+.audiences {
+  --bg: var(--ink-950);
+  background: var(--ink-950);
+  border-top: 1px solid var(--rule);
+}
+
+.audiences__list {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.audiences__item + .audiences__item {
+  border-top: 1px solid var(--rule);
+}
+
+.audiences__link {
+  position: relative;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  gap: 0.25rem 0.5rem;
+  align-items: start;
+  padding: 1.375rem 0 1.5rem;
+  text-decoration: none;
+}
+
+.audiences__num {
+  grid-row: 1 / span 2;
+  padding-top: 0.45rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-stretch: 118%;
+  letter-spacing: 0.14em;
+  color: var(--ochre-400);
+}
+
+.audiences__title {
+  font-size: 1.3125rem;
+  font-weight: 700;
+  font-stretch: 104%;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.audiences__text {
+  grid-column: 2;
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--steel-300);
+}
+
+.audiences__more {
+  display: inline-flex;
+  grid-row: 1 / span 2;
+  grid-column: 3;
+  align-items: center;
+  align-self: center;
+  gap: 0.5rem;
+  color: var(--steel-300);
+}
+
+/* Phones show the arrow only; the words stay available to screen readers. */
+.audiences__more-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.audiences__more .icon {
+  transition: transform 0.3s var(--ease-out);
+}
+
+@media (hover: hover) {
+  .audiences__link:hover .audiences__more {
+    color: var(--ochre-400);
+  }
+
+  .audiences__link:hover .audiences__more .icon {
+    transform: translateX(4px);
+  }
+}
+
+@media (min-width: 48em) {
+  .audiences__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .audiences__item + .audiences__item {
+    border-top: 0;
+    border-left: 1px solid var(--rule);
+  }
+
+  .audiences__link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    height: 100%;
+    padding: 2rem clamp(1.25rem, 2.6vw, 2.25rem) 2.25rem;
+  }
+
+  .audiences__item:first-child .audiences__link {
+    padding-left: 0;
+  }
+
+  .audiences__num {
+    padding-top: 0;
+  }
+
+  .audiences__more {
+    align-self: flex-start;
+    margin-top: auto;
+    padding-top: 1rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .audiences__more-label {
+    position: static;
+    width: auto;
+    height: auto;
+    clip-path: none;
+  }
+}

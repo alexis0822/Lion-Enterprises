@@ -1,0 +1,10 @@
+{#- Thumb-reach contact bar, phones and small tablets only. Shown after the hero buttons scroll away. -#}
+{%- from "macros.njk" import icon -%}
+<div class="cta-bar" data-cta-bar role="region" aria-label="{{ copy.a11y.quickActions }}">
+  <a class="cta-bar__btn cta-bar__btn--call" href="tel:{{ site.phone.e164 }}" aria-label="{{ copy.cta.callLong | fill(site) }}">
+    {{ icon("phone") }}<span>{{ copy.cta.call }}</span>
+  </a>
+  <a class="cta-bar__btn cta-bar__btn--info" href="#contacto">
+    <span>{{ copy.cta.info }}</span>{{ icon("arrow") }}
+  </a>
+</div>

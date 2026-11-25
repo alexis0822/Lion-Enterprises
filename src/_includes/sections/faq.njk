@@ -1,0 +1,32 @@
+{%- from "macros.njk" import icon, eyebrow -%}
+{%- set f = copy.faq -%}
+<section class="section faq theme-light" id="preguntas" aria-labelledby="faq-title">
+  <div class="wrap">
+    {{ eyebrow("04", f.eyebrow) }}
+
+    <div class="faq__grid">
+      <h2 class="h2 faq__title" id="faq-title" data-reveal>{{ f.title }}</h2>
+
+      <div class="faq__list" data-reveal>
+        {%- for item in f.items %}
+        <details class="qa">
+          <summary class="qa__q">
+            <span>{{ item.q }}</span>
+            <span class="qa__icon" aria-hidden="true">{{ icon("plus") }}</span>
+          </summary>
+          <div class="qa__a">
+            <p>{{ item.a }}</p>
+          </div>
+        </details>
+        {%- endfor %}
+      </div>
+
+      <div class="faq__aside" data-reveal>
+        <p>{{ f.aside }}</p>
+        <a class="btn btn--dark" href="#contacto">
+          <span>{{ copy.cta.info }}</span>{{ icon("arrow", "btn__icon") }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

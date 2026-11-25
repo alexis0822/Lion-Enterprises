@@ -1,0 +1,23 @@
+---
+layout: base.njk
+permalink: /404.html
+noindex: true
+eleventyComputed:
+  title: "{{ copy.notFound.title }} | {{ site.name }}"
+---
+{%- from "macros.njk" import icon -%}
+<section class="notfound theme-dark" aria-labelledby="notfound-title">
+  <div class="wrap notfound__inner">
+    <p class="notfound__code" aria-hidden="true">404</p>
+    <h1 class="h2" id="notfound-title">{{ copy.notFound.title }}</h1>
+    <p class="notfound__text">{{ copy.notFound.text }}</p>
+    <div class="notfound__actions">
+      <a class="btn btn--primary" href="/">
+        <span>{{ copy.notFound.link }}</span>{{ icon("arrow", "btn__icon") }}
+      </a>
+      <a class="btn btn--ghost" href="tel:{{ site.phone.e164 }}">
+        {{ icon("phone", "btn__icon") }}<span>{{ copy.cta.callLong | fill(site) }}</span>
+      </a>
+    </div>
+  </div>
+</section>

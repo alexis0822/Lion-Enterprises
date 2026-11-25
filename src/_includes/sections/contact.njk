@@ -1,0 +1,48 @@
+{%- from "macros.njk" import icon, eyebrow -%}
+{%- set c = copy.contact -%}
+<section class="section contact theme-dark" id="contacto" aria-labelledby="contact-title" data-contact>
+  <div class="wrap">
+    {{ eyebrow("05", c.eyebrow) }}
+
+    <div class="contact__grid">
+      <div class="contact__info">
+        <h2 class="h2" id="contact-title" data-reveal>{{ c.title }}</h2>
+        <p class="contact__intro" data-reveal>{{ c.intro }}</p>
+
+        <dl class="contact__list" data-reveal>
+          <div class="contact__row">
+            <dt class="label">{{ c.labels.phone }}</dt>
+            <dd><a class="contact__phone" href="tel:{{ site.phone.e164 }}">{{ site.phone.display }}</a></dd>
+          </div>
+          <div class="contact__row">
+            <dt class="label">{{ c.labels.email }}</dt>
+            <dd><a class="contact__email" href="mailto:{{ site.email }}">{{ site.email }}</a></dd>
+          </div>
+          <div class="contact__row">
+            {%- if site.address and site.address.street %}
+            <dt class="label">{{ c.labels.address }}</dt>
+            <dd>{{ site.address.street }}<br>{{ site.locality }}, {{ site.region }}{% if site.address.postalCode %} {{ site.address.postalCode }}{% endif %}</dd>
+            {%- else %}
+            <dt class="label">{{ c.labels.location }}</dt>
+            <dd>{{ site.locality }}, {{ site.region }}</dd>
+            {%- endif %}
+          </div>
+          {%- if site.hours and site.hours.length %}
+          <div class="contact__row">
+            <dt class="label">{{ c.labels.hours }}</dt>
+            <dd>
+              {%- for h in site.hours %}
+              <span class="contact__hours">{{ h.days }}: {{ h.time }}</span>
+              {%- endfor %}
+            </dd>
+          </div>
+          {%- endif %}
+        </dl>
+      </div>
+
+      <div class="contact__panel" data-reveal>
+        {% include "partials/form.njk" %}
+      </div>
+    </div>
+  </div>
+</section>

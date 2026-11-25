@@ -1,0 +1,64 @@
+{%- from "macros.njk" import icon, logo -%}
+{%- set callLabel = copy.cta.callLong | fill(site) -%}
+<header class="site-header theme-dark" data-header>
+  <div class="wrap site-header__inner">
+    <a class="logo" href="{{ home }}#inicio" aria-label="{{ copy.a11y.home }}">{{ logo(site) }}</a>
+
+    <nav class="site-nav" aria-label="{{ copy.a11y.mainNav }}">
+      <ul class="site-nav__list">
+        {%- for item in copy.nav %}
+        {%- if item.header != false %}
+        <li><a class="site-nav__link" href="{{ home }}{{ item.href }}">{{ item.label }}</a></li>
+        {%- endif %}
+        {%- endfor %}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a class="header-call" href="tel:{{ site.phone.e164 }}" aria-label="{{ callLabel }}">
+        {{ icon("phone") }}
+        <span class="header-call__num">{{ site.phone.display }}</span>
+      </a>
+      <a class="btn btn--primary btn--sm header-cta" href="{{ home }}#contacto">{{ copy.cta.info }}</a>
+      <button class="menu-toggle" type="button" data-menu-open aria-haspopup="dialog" aria-controls="menu">
+        <span class="menu-toggle__label">{{ copy.a11y.menu }}</span>
+        {{ icon("menu") }}
+      </button>
+    </div>
+  </div>
+</header>
+
+<dialog class="menu theme-dark" id="menu" aria-label="{{ copy.a11y.menu }}" data-menu>
+  <div class="menu__inner">
+    <div class="wrap menu__bar">
+      <a class="logo" href="{{ home }}#inicio" aria-label="{{ copy.a11y.home }}" data-menu-link>{{ logo(site) }}</a>
+      <button class="menu-toggle" type="button" data-menu-close autofocus aria-label="{{ copy.a11y.closeMenu }}">
+        <span class="menu-toggle__label">{{ copy.a11y.close }}</span>
+        {{ icon("close") }}
+      </button>
+    </div>
+
+    <nav class="wrap menu__nav" aria-label="{{ copy.a11y.mainNav }}">
+      <ul class="menu__list">
+        {%- for item in copy.nav %}
+        <li style="--i:{{ loop.index0 }}">
+          <a class="menu__link" href="{{ home }}{{ item.href }}" data-menu-link>
+            <span class="menu__num" aria-hidden="true">{{ loop.index | pad2 }}</span>
+            <span class="menu__label">{{ item.label }}</span>
+          </a>
+        </li>
+        {%- endfor %}
+      </ul>
+    </nav>
+
+    <div class="wrap menu__foot">
+      <a class="btn btn--primary" href="{{ home }}#contacto" data-menu-link>
+        <span>{{ copy.cta.info }}</span>{{ icon("arrow", "btn__icon") }}
+      </a>
+      <a class="btn btn--ghost" href="tel:{{ site.phone.e164 }}">
+        {{ icon("phone", "btn__icon") }}<span>{{ callLabel }}</span>
+      </a>
+      <p class="menu__meta">{{ site.locality }}, {{ site.region }}</p>
+    </div>
+  </div>
+</dialog>
