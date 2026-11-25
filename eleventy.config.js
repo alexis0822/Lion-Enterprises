@@ -13,7 +13,7 @@ async function bundle(entry) {
     write: false,
     target: TARGET,
     format: "iife",
-    external: ["/fonts/*"],
+    external: ["/fonts/*", "/Lion-Enterprises/fonts/*"],
     logLevel: "warning",
   });
   return result.outputFiles[0].text.trim();
