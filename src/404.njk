@@ -12,7 +12,7 @@ eleventyComputed:
     <h1 class="h2" id="notfound-title">{{ copy.notFound.title }}</h1>
     <p class="notfound__text">{{ copy.notFound.text }}</p>
     <div class="notfound__actions">
-      <a class="btn btn--primary" href="/">
+      <a class="btn btn--primary" href="{{ '/' | url }}">
         <span>{{ copy.notFound.link }}</span>{{ icon("arrow", "btn__icon") }}
       </a>
       <a class="btn btn--ghost" href="tel:{{ site.phone.e164 }}">
